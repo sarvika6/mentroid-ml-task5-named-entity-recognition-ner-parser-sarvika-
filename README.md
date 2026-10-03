@@ -26,6 +26,32 @@ This project implements a **production-ready NER pipeline** that:
 5. Evaluates model quality against hand-labelled gold data.
 
 ---
+## Approach
+
+### Model choice
+I used spaCy's `en_core_web_sm` as the default model because it tags DATE, GPE/LOC and ORG out of the box and runs quickly on a CPU, which suits short news snippets. To check whether a larger or different model would do better, I compared it against spaCy's `en_core_web_trf` (transformer-based) and the Hugging Face model `dslim/bert-base-NER`. The Hugging Face model was trained on CoNLL-2003, which has no DATE class, so it can only be compared on Locations and Organizations.
+
+### Label mapping
+The task asks for three categories, so I mapped model labels to them in `config.py`: DATE → Dates, ORG → Organizations, and both GPE and LOC → Locations. spaCy uses GPE for countries, cities and states, and LOC for other places such as regions and bodies of water. A news reader would treat both as "locations", so merging them matches the task. Keeping the mapping in one configurable place means it can be changed without touching the pipeline code.
+
+### Post-processing
+Models often return the same entity several times in one snippet, so I deduplicate entities per article, case-insensitively, keeping the first occurrence. Each entity keeps its character offsets (`start`, `end`) so results can be traced back to the source text and highlighted, for example with displaCy. Output order follows the position in the text.
+
+### Design decisions
+- **Backend abstraction:** spaCy and Hugging Face sit behind a common `BaseNERBackend` interface (strategy pattern). The extractor, formatter and evaluator don't depend on which model is used, so adding a model means adding one class.
+- **Data outside the code:** the 5 snippets and the gold labels live in JSON files under `data/`, not in the source.
+- **CLI:** an `argparse` command-line interface selects the backend, model, input file and output format (table, JSON or CSV), so the same code serves quick runs and reproducible exports.
+- **Separation of concerns:** configuration, data models (dataclasses), extraction, formatting and evaluation are separate modules, each covered by tests. Results go to stdout and logs go to stderr, so output can be piped or saved cleanly.
+- **Batch processing:** `nlp.pipe()` is used for efficient processing of multiple articles.
+
+### Evaluation
+I hand-labelled the entities in the 5 snippets (`data/gold_labels.json`) and score each backend with precision, recall and F1 per category. Matching is case-insensitive exact match on the entity text, counted per article and category, then aggregated across articles. I chose exact match because it is simple, transparent and easy to reproduce. Annotation rules:  relative expressions such as "last Friday" count as dates, and an entity's gold label is the span a reader would copy, without articles like "the"
+
+### Trade-offs and limitations
+- **Strict matching:** exact match penalises boundary differences. If the model returns "since January 2023" and the gold label is "January 2023", it counts as both a false positive and a false negative even though the model found the date. 
+- **Small sample:** with only 5 snippets and [N] gold entities, a single error moves the scores noticeably, so the numbers are indicative rather than statistically reliable.
+- **Set-based scoring:** because entities are deduplicated, repeated mentions in one snippet are counted once.
+- **Pretrained models only:** I did not fine-tune on news data, so domain gaps show up as errors. Locations were mostly missed. The model found 3 of 8 gold locations (recall 0.38), with no false positives. Organizations had too many false positives. 5 false positives against 1 miss (precision 0.55).
 
 ## Architecture
 
@@ -327,6 +353,12 @@ make lint-fix      # auto-fix style issues
 ```
 
 
+---
+## Author
+
+**Sarvika**
+Email: sarvika166@gmail.com
+GitHub: https://github.com/sarvika6
 ---
 
 ## License
