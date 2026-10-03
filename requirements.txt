@@ -1,0 +1,12 @@
+# Core
+spacy>=3.7,<4.0
+
+# Development / test
+pytest>=7.4
+pytest-cov>=4.1
+ruff>=0.3
+black>=24.3
+
+# Optional: HuggingFace backend (uncomment or install separately)
+# transformers>=4.35
+# torch>=2.0

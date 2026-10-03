@@ -1,0 +1,47 @@
+# Byte-compiled / optimised / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Linting caches
+.ruff_cache/
+.mypy_cache/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs (keep directory, ignore content)
+outputs/*.html
+outputs/*.csv
+outputs/*.json
+!outputs/.gitkeep
+
+# HuggingFace model cache
+~/.cache/huggingface/

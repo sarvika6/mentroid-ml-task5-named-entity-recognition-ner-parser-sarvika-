@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ner-parser"
+version = "0.1.0"
+description = "Production-quality Named Entity Recognition pipeline for news article snippets."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Your Name", email = "you@example.com" },
+]
+keywords = ["NLP", "NER", "spaCy", "named entity recognition", "news"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "spacy>=3.7,<4.0",
+]
+
+[project.optional-dependencies]
+hf = [
+    "transformers>=4.35",
+    "torch>=2.0",
+]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.3",
+    "black>=24.3",
+]
+
+[project.scripts]
+ner-parser = "ner_parser.cli:main"
+ner-evaluate = "evaluate:main"
+
+[project.urls]
+Homepage = "https://github.com/your-org/ner-parser"
+Repository = "https://github.com/your-org/ner-parser"
+
+# ---------------------------------------------------------------------------
+# Tool configuration
+# ---------------------------------------------------------------------------
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ner_parser"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+log_cli = false
+log_cli_level = "WARNING"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ANN", # flake8-annotations
+    "PLC", # pylint convention
+]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN", "S101"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]

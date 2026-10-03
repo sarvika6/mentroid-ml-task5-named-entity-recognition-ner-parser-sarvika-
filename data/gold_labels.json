@@ -1,0 +1,37 @@
+[
+  {
+    "article_id": 0,
+    "note": "RBI raises rates; relative date 'last Friday'; ORG: Reserve Bank of India",
+    "Dates": ["last Friday", "January 2023"],
+    "Locations": [],
+    "Organizations": ["Reserve Bank of India"]
+  },
+  {
+    "article_id": 1,
+    "note": "Amazon fulfilment centres; multiple Indian city LOC; date: March 2025",
+    "Dates": ["March 2025"],
+    "Locations": ["Pune", "Hyderabad", "Chennai"],
+    "Organizations": ["Amazon"]
+  },
+  {
+    "article_id": 2,
+    "note": "Independence Day; Red Fort is a LOC; ISRO and DRDO are ORGs",
+    "Dates": ["15 August 2023", "the past decade"],
+    "Locations": ["New Delhi", "Red Fort"],
+    "Organizations": ["ISRO", "DRDO"]
+  },
+  {
+    "article_id": 3,
+    "note": "Tesla and Volkswagen; Shanghai is a GPE; relative date 'yesterday'",
+    "Dates": ["yesterday"],
+    "Locations": ["Shanghai"],
+    "Organizations": ["Tesla", "Volkswagen"]
+  },
+  {
+    "article_id": 4,
+    "note": "Ambiguous: 'Amazon' is both a town (LOC) and a company (ORG); relative date 'last Tuesday'",
+    "Dates": ["last Tuesday"],
+    "Locations": ["Amazon", "Brazil"],
+    "Organizations": ["Amazon Web Services"]
+  }
+]
